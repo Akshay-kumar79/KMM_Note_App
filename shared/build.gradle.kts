@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.sql.delight)
 }
 
 kotlin {
@@ -22,14 +23,30 @@ kotlin {
             isStatic = true
         }
     }
-
+    
     sourceSets {
         commonMain.dependencies {
             //put your multiplatform dependencies here
+            implementation(libs.kotlinx.datetime)
+        }
+        jvmMain.dependencies {
+            implementation(libs.sql.delight.sqlite.driver)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
+        androidMain.dependencies {
+            implementation(libs.sql.delight.android.driver)
+        }
+        iosMain.dependencies {
+            implementation(libs.sql.delight.native.driver)
+        }
+    }
+}
+
+sqldelight {
+    databases.create("NoteDatabase") {
+        packageName = "com.akshaw.kmmnoteapp"
     }
 }
 
